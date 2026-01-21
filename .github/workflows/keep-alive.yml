@@ -2,7 +2,7 @@ name: Keep Services Alive
 
 on:
   schedule:
-    - cron: '*/14 * * * *' # Run every 14 minutes (Render spins down after 15m)
+    - cron: '0 */3 * * *' # Run every 3 hours (sufficient for Supabase 7-day inactivity)
   workflow_dispatch: # Allow manual trigger via GitHub UI
 
 jobs:
@@ -13,7 +13,15 @@ jobs:
         run: |
           echo "Pinging Shazam Backend..."
           curl -I https://shazam-efve.onrender.com/
-          
+
+      - name: Ping Supabase Database
+        run: |
+          echo "Pinging Supabase to keep project active..."
+          curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/" | grep -q "200" && echo "Supabase ping successful!" || echo "Supabase ping completed"
+
       # If you have a deployed frontend URL (e.g. on Vercel or Render), uncomment and add it here:
       # - name: Ping Frontend
       #   run: curl -I https://your-frontend-url.com/
