@@ -3,7 +3,7 @@
 ### Project is Live at- https://notespy.vercel.app/
 
 ## 1. Overview
-**NoteSpy** is a modern, high-performance music recognition web application. Inspired by Shazam, it allows users to identify songs by recording audio directly from their browser or uploading audio files. The project emphasizes a premium user experience with advanced animations and a clean interface.
+**NoteSpy** is a modern, high-performance music recognition web application. Inspired by Shazam, it allows users to identify songs by recording audio directly from their browser. The project emphasizes a premium user experience with advanced animations and a clean interface.
 
 ## 2. Technical Stack
 The project is built using a robust and modern stack:
