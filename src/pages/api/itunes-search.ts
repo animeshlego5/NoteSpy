@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkRateLimit, getClientIP, RATE_LIMITS } from "@/lib/rate-limit";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { validateSearchParam, sanitizeText } from "@/lib/validation";
 import { createRequestLogger, getSafeErrorMessage } from "@/lib/logger";
 
@@ -44,14 +44,26 @@ export default async function handler(
     }
 
     try {
+        // --- CHANGE 1 & 2: Extract IP natively for Next.js Page Router ---
+        const forwarded = req.headers["x-forwarded-for"];
+        const clientIP = typeof forwarded === "string" 
+            ? forwarded.split(",")[0].trim() 
+            : (Array.isArray(forwarded) ? forwarded[0].trim() : (req.socket?.remoteAddress || "127.0.0.1"));
+
         // Rate limiting
-        const clientIP = getClientIP(req as unknown as Request);
         const rateLimit = checkRateLimit(`itunes:${clientIP}`, RATE_LIMITS.itunesSearch);
 
-        // Set rate limit headers
-        Object.entries(rateLimit.headers).forEach(([key, value]) => {
-            res.setHeader(key, value);
-        });
+        // --- CHANGE 3: Set rate limit headers safely ---
+        // This handles both Web API Headers and standard JavaScript objects
+        if (typeof rateLimit.headers?.forEach === "function") {
+            (rateLimit.headers as unknown as Headers).forEach((value, key) => {
+                res.setHeader(key, value);
+            });
+        } else if (rateLimit.headers) {
+            Object.entries(rateLimit.headers).forEach(([key, value]) => {
+                res.setHeader(key, value as string | number | readonly string[]);
+            });
+        }
 
         if (rateLimit.limited) {
             logger.warn("Rate limit exceeded", { clientIP });
