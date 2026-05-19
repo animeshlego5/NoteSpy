@@ -17,10 +17,19 @@ jobs:
       - name: Ping Supabase Database
         run: |
           echo "Pinging Supabase to keep project active..."
-          curl -s -o /dev/null -w "%{http_code}" \
+          # Note: We must query an actual table to wake up PostgreSQL.
+          # Pinging the root /rest/v1/ only hits the API gateway/cache.
+          # REPLACE 'YOUR_TABLE_NAME_HERE' with a real table in your database.
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" | grep -q "200" && echo "Supabase ping successful!" || echo "Supabase ping completed"
+            "${{ secrets.SUPABASE_URL }}/rest/v1/fingerprints?select=id&limit=1")
+          
+          if [ "$STATUS" = "200" ]; then
+            echo "Supabase ping successful!"
+          else
+            echo "Supabase ping failed with status $STATUS"
+          fi
 
       # If you have a deployed frontend URL (e.g. on Vercel or Render), uncomment and add it here:
       # - name: Ping Frontend
