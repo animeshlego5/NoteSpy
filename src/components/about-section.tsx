@@ -45,7 +45,7 @@ const aboutItems = [
             <p>
                 NoteSpy converts your audio into a compact "fingerprint" representation using signal
                 processing techniques. This fingerprint is then compared against a database of known song
-                fingerprints using efficient similarity search, returning the closest match along with a
+                fingerprints using hash matching and time-offset alignment, returning the exact match along with a
                 confidence score.
             </p>
         ),
@@ -64,15 +64,16 @@ const aboutItems = [
         ),
     },
     {
-        id: "ml-audio",
-        title: "Machine Learning & Audio Intelligence",
+        id: "dsp-audio",
+        title: "Digital Signal Processing",
         content: (
             <p>
                 Under the hood, NoteSpy relies on audio fingerprinting concepts similar to those used in
-                commercial music ID systems: it transforms raw audio into time–frequency representations,
-                extracts robust features, and uses nearest-neighbor or hash-based lookup to find the
-                closest song in the catalog. The design emphasizes robustness to noise and short clips
-                so that even a few seconds of audio can be enough to identify a track.
+                commercial music ID systems. It does not use machine learning; instead, it uses pure
+                Digital Signal Processing (DSP). It transforms raw audio into a time–frequency spectrogram,
+                extracts peak frequencies, and uses combinatorial hashing to find exact matches in the
+                database. This design emphasizes robustness to noise and allows a track to be identified
+                from just a few seconds of audio.
             </p>
         ),
     },
