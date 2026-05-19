@@ -493,30 +493,31 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
                       <Volume2 className="w-5 h-5" />
                     )}
                   </button>
-                  <div
-                    className="relative w-20 h-2 bg-zinc-700 rounded-full cursor-pointer group"
-                    onClick={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const clickX = e.clientX - rect.left;
-                      const newVolume = Math.max(0, Math.min(1, clickX / rect.width));
-                      if (audioRef.current) {
-                        audioRef.current.volume = newVolume;
-                      }
-                      setVolume(newVolume);
-                      if (newVolume === 0) {
-                        setIsMuted(true);
-                      } else if (isMuted) {
-                        setIsMuted(false);
-                      }
-                    }}
-                  >
+                  <div className="relative w-20 h-2 flex items-center group">
+                    {/* Background Track */}
+                    <div className="absolute w-full h-full bg-zinc-700 rounded-full pointer-events-none" />
+                    
+                    {/* Gradient Fill */}
                     <div
-                      className="absolute h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all"
+                      className="absolute h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all pointer-events-none"
                       style={{ width: `${(isMuted ? 0 : volume) * 100}%` }}
                     />
+                    
+                    {/* Hover Thumb */}
                     <div
-                      className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
                       style={{ left: `calc(${(isMuted ? 0 : volume) * 100}% - 6px)` }}
+                    />
+                    
+                    {/* Invisible Native Input overlay */}
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={isMuted ? 0 : volume}
+                      onChange={handleVolumeChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     />
                   </div>
                 </div>
