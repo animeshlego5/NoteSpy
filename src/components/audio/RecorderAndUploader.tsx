@@ -493,15 +493,32 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
                       <Volume2 className="w-5 h-5" />
                     )}
                   </button>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={isMuted ? 0 : volume}
-                    onChange={handleVolumeChange}
-                    className="w-20 h-1 bg-zinc-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer"
-                  />
+                  <div
+                    className="relative w-20 h-2 bg-zinc-700 rounded-full cursor-pointer group"
+                    onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const clickX = e.clientX - rect.left;
+                      const newVolume = Math.max(0, Math.min(1, clickX / rect.width));
+                      if (audioRef.current) {
+                        audioRef.current.volume = newVolume;
+                      }
+                      setVolume(newVolume);
+                      if (newVolume === 0) {
+                        setIsMuted(true);
+                      } else if (isMuted) {
+                        setIsMuted(false);
+                      }
+                    }}
+                  >
+                    <div
+                      className="absolute h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all"
+                      style={{ width: `${(isMuted ? 0 : volume) * 100}%` }}
+                    />
+                    <div
+                      className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{ left: `calc(${(isMuted ? 0 : volume) * 100}% - 6px)` }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -549,7 +566,7 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           >
-            <SongCard metadata={songMetadata} matchScore={matchScore} />
+            <SongCard metadata={songMetadata} matchScore={matchScore} volume={volume} isMuted={isMuted} />
           </motion.div>
         )}
       </AnimatePresence>

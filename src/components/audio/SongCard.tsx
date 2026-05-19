@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import TiltedCard from "@/components/ui/tilted-card";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, ExternalLink } from "lucide-react";
@@ -18,15 +18,27 @@ export interface SongMetadata {
 interface SongCardProps {
     metadata: SongMetadata;
     matchScore?: number;
+    volume?: number;
+    isMuted?: boolean;
 }
 
-export default function SongCard({ metadata, matchScore }: SongCardProps) {
+export default function SongCard({ metadata, matchScore, volume = 0.75, isMuted = false }: SongCardProps) {
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    // Sync volume and mute state with the preview audio element
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = isMuted ? 0 : volume;
+            audioRef.current.muted = isMuted;
+        }
+    }, [volume, isMuted]);
 
     const handlePlayPause = () => {
         if (!audioRef.current) {
             audioRef.current = new Audio(metadata.previewUrl);
+            audioRef.current.volume = isMuted ? 0 : volume;
+            audioRef.current.muted = isMuted;
             audioRef.current.addEventListener("ended", () => setIsPlaying(false));
         }
 
