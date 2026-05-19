@@ -31,10 +31,7 @@ const aboutItems = [
         title: "What is NoteSpy?",
         content: (
             <p>
-                NoteSpy is a browser-based music recognition tool that lets you identify songs by either
-                recording a short audio snippet or uploading an audio file. It focuses on fast matching,
-                clean design, and privacy-friendly processing so you can quickly discover what you are
-                listening to without extra friction.
+                NoteSpy is a browser-based music recognition tool that lets you identify songs by either recording a short audio snippet or uploading an audio file. It focuses on fast matching, clean design, and privacy-friendly processing so you can quickly discover what you are listening to without extra friction. Beyond just recognition, NoteSpy helps you explore further by suggesting similar music based on your matched songs.
             </p>
         ),
     },
@@ -43,10 +40,7 @@ const aboutItems = [
         title: "How NoteSpy Works",
         content: (
             <p>
-                NoteSpy converts your audio into a compact "fingerprint" representation using signal
-                processing techniques. This fingerprint is then compared against a database of known song
-                fingerprints using hash matching and time-offset alignment, returning the exact match along with a
-                confidence score.
+                NoteSpy converts your audio into a compact "fingerprint" representation using signal processing techniques. This fingerprint is then compared against a database of known song fingerprints using hash matching and time-offset alignment, returning the exact match along with a confidence score. Once a match is found, NoteSpy seamlessly queries the Last.fm API to generate a curated list of similar track recommendations.
             </p>
         ),
     },
@@ -55,11 +49,7 @@ const aboutItems = [
         title: "Technologies Behind the Scenes",
         content: (
             <p>
-                The frontend is built with Next.js and React, styled with Tailwind CSS and ShadCN-based
-                components for consistent, accessible UI elements like buttons, cards, and dialogs. The
-                backend exposes a simple upload API that accepts recorded or uploaded audio, extracts
-                features with audio-processing libraries, and runs a matching algorithm over stored song
-                fingerprints.
+                The frontend is built with Next.js and React, styled with Tailwind CSS and ShadCN-based components for consistent, accessible UI elements like buttons, cards, and dialogs. The backend is powered by Python and FastAPI, exposing an ultra-fast API that accepts recorded or uploaded audio, extracts features with audio-processing libraries (like Librosa and SciPy), runs a matching algorithm over stored song fingerprints, and securely handles external API queries for music discovery.
             </p>
         ),
     },
@@ -68,12 +58,7 @@ const aboutItems = [
         title: "Digital Signal Processing",
         content: (
             <p>
-                Under the hood, NoteSpy relies on audio fingerprinting concepts similar to those used in
-                commercial music ID systems. It does not use machine learning; instead, it uses pure
-                Digital Signal Processing (DSP). It transforms raw audio into a time–frequency spectrogram,
-                extracts peak frequencies, and uses combinatorial hashing to find exact matches in the
-                database. This design emphasizes robustness to noise and allows a track to be identified
-                from just a few seconds of audio.
+                Under the hood, NoteSpy relies on audio fingerprinting concepts similar to those used in commercial music ID systems. It does not use machine learning; instead, it uses pure Digital Signal Processing (DSP). It transforms raw audio into a time–frequency spectrogram, extracts peak frequencies, and uses combinatorial hashing to find exact matches in the database. This design emphasizes robustness to noise and allows a track to be identified from just a few seconds of audio.
             </p>
         ),
     },
@@ -82,11 +67,7 @@ const aboutItems = [
         title: "Design & Interaction",
         content: (
             <p>
-                The interface uses animated hero text, scramble effects, and reactive hover gradients to
-                give the project a modern, "alive" feel while keeping the core workflow—record, upload,
-                match—clear and simple. Background effects such as animated boxes and carefully layered
-                z-index stacking ensure the hero content remains readable while still feeling dynamic and
-                immersive.
+                The interface uses animated hero text, scramble effects, and reactive hover gradients to give the project a modern, "alive" feel while keeping the core workflow—record, upload, match—clear and simple. Background effects such as animated boxes and carefully layered z-index stacking ensure the hero content remains readable while still feeling dynamic and immersive.
             </p>
         ),
     },
