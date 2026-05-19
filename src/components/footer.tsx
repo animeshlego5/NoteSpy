@@ -48,7 +48,7 @@ export default function Footer() {
                         </Link>
 
                         <Link
-                            href="https://drive.google.com/file/d/1TjJfGg7AjXVW7p34clg4zi3iuJ2xLaO0/view?usp=sharing"
+                            href="https://animeshlego5.github.io/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
@@ -61,7 +61,7 @@ export default function Footer() {
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <span className="text-sm font-medium">Resume</span>
+                            <span className="text-sm font-medium">Portfolio</span>
                         </Link>
                     </div>
                 </div>
