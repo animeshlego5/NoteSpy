@@ -126,6 +126,12 @@ export const RATE_LIMITS = {
         windowMs: 60 * 1000,   // per minute
         message: 'Too many search requests. Please slow down.',
     },
+    // Recommendations - lightweight GET endpoint
+    recommendations: {
+        maxRequests: 20,       // 20 requests
+        windowMs: 60 * 1000,   // per minute
+        message: 'Too many recommendation requests. Please wait a moment.',
+    },
     // General API rate limit
     general: {
         maxRequests: 100,      // 100 requests

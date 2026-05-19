@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import SongCard, { SongMetadata } from "./SongCard";
+import RecommendationsSection from "./RecommendationsSection";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -59,6 +60,8 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
   const [result, setResult] = useState<string | null>(null);
   const [songMetadata, setSongMetadata] = useState<SongMetadata | null>(null);
   const [matchScore, setMatchScore] = useState<number | undefined>(undefined);
+  const [matchedTitle, setMatchedTitle] = useState<string | null>(null);
+  const [matchedArtist, setMatchedArtist] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [openError, setOpenError] = useState(false);
 
@@ -89,6 +92,8 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
     setResult(null);
     setSongMetadata(null);
     setMatchScore(undefined);
+    setMatchedTitle(null);
+    setMatchedArtist(null);
     setLoading(false);
 
     setIsInitializing(true);
@@ -162,6 +167,8 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
     setLoading(false);
     setResult(null);
     setSongMetadata(null);
+    setMatchedTitle(null);
+    setMatchedArtist(null);
     setMatchScore(undefined);
     setRecordingState("idle");
   };
@@ -276,6 +283,8 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
     setResult(null);
     setSongMetadata(null);
     setMatchScore(undefined);
+    setMatchedTitle(null);
+    setMatchedArtist(null);
     setError(null);
 
     // Create abort controller for this request
@@ -302,6 +311,8 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
 
       if (data.match) {
         setMatchScore(data.score);
+        setMatchedTitle(data.title);
+        setMatchedArtist(data.artist);
         const metadata = await fetchItunesMetadata(data.title, data.artist);
 
         if (metadata) {
@@ -560,6 +571,20 @@ export default function RecorderAndUploader({ onShowTestSongs }: RecorderAndUplo
                 <p className="font-medium text-lg whitespace-pre-line">{result}</p>
               </CardContent>
             </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Recommendations Section */}
+      <AnimatePresence>
+        {matchedTitle && matchedArtist && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <RecommendationsSection title={matchedTitle} artist={matchedArtist} />
           </motion.div>
         )}
       </AnimatePresence>
