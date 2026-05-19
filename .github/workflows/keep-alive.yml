@@ -20,15 +20,19 @@ jobs:
           # Note: We must query an actual table to wake up PostgreSQL.
           # Pinging the root /rest/v1/ only hits the API gateway/cache.
           # REPLACE 'YOUR_TABLE_NAME_HERE' with a real table in your database.
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+          # We query using ?limit=1 without specifying a column name (like select=id)
+          # in case the column name does not exist on your fingerprints table.
+          STATUS=$(curl -s -o response.json -w "%{http_code}" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/fingerprints?select=id&limit=1")
+            "${{ secrets.SUPABASE_URL }}/rest/v1/fingerprints?limit=1")
           
-          if [ "$STATUS" = "200" ]; then
+          if [ "$STATUS" = "200" ] || [ "$STATUS" = "204" ]; then
             echo "Supabase ping successful!"
           else
             echo "Supabase ping failed with status $STATUS"
+            echo "Response: $(cat response.json)"
+            exit 1
           fi
 
       # If you have a deployed frontend URL (e.g. on Vercel or Render), uncomment and add it here:
